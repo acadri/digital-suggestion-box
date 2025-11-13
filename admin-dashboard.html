@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Muni University</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="firebase-config.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <div class="logo-main">
+                    <img src="logo.webp" alt="Muni University Logo" class="logo-img">
+                    <div class="logo-text">
+                        <span class="system-name">Admin Dashboard</span>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-links">
+                <span id="adminName" class="nav-link" style="color: var(--cream);"></span>
+                <a href="#" id="logoutBtn" class="nav-link">Logout</a>
+                <a href="index.html" class="nav-link">Main Site</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="admin-dashboard">
+        <div class="container">
+            <div class="section-header">
+                <h2>Manage Student Suggestions</h2>
+                <p>Review and respond to student suggestions</p>
+            </div>
+
+            <div class="admin-stats">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-inbox"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-number" id="totalSuggestions">0</div>
+                        <div class="stat-label">Total Suggestions</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-number" id="pendingSuggestions">0</div>
+                        <div class="stat-label">Pending Review</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-number" id="resolvedSuggestions">0</div>
+                        <div class="stat-label">Resolved</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-number" id="withResponses">0</div>
+                        <div class="stat-label">With Responses</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filters">
+                <select id="statusFilter">
+                    <option value="all">All Status</option>
+                    <option value="New">New</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Resolved">Resolved</option>
+                    <option value="Under Review">Under Review</option>
+                </select>
+                <select id="departmentFilter">
+                    <option value="all">All Departments</option>
+                    <option value="Faculty of Technoscience">Faculty of Technoscience</option>
+                    <option value="Faculty of Science">Faculty of Science</option>
+                    <option value="Faculty of Education">Faculty of Education</option>
+                    <option value="Faculty of Management Science">Faculty of Management Science</option>
+                    <option value="Faculty of Agriculture">Faculty of Agriculture and Environmental Science</option>
+                    <option value="Faculty of Health Science">Faculty of Health Science</option>
+                    <option value="Administration">Administration</option>
+                    <option value="Library">Library</option>
+                    <option value="ICT">ICT Department</option>
+                    <option value="Other">Other</option>
+                </select>
+                <button id="clearFilters" class="cta-button secondary">Clear Filters</button>
+            </div>
+
+            <div id="suggestionsList" class="suggestions-list">
+                <!-- Suggestions will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Response Modal -->
+    <div id="responseModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Respond to Suggestion</h3>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="suggestionDetails" class="suggestion-details"></div>
+                <form id="responseForm">
+                    <div class="form-group">
+                        <label for="responseStatus">Status</label>
+                        <select id="responseStatus" name="status" required>
+                            <option value="New">New</option>
+                            <option value="Under Review">Under Review</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Resolved">Resolved</option>
+                            <option value="Not Feasible">Not Feasible</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="adminResponse">Your Response</label>
+                        <textarea id="adminResponse" name="response" required placeholder="Provide feedback or updates about this suggestion..."></textarea>
+                        <div class="char-counter"><span id="responseCharCount">0</span>/1000 characters</div>
+                    </div>
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-paper-plane"></i>
+                        Submit Response
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="admin-dashboard.js"></script>
+</body>
+</html>
