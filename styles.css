@@ -113,6 +113,15 @@ body {
     transform: translateY(-2px);
 }
 
+.nav-toggle {
+    display: none; /* Hidden by default */
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
 /* Section Styles */
 section {
     padding: 5rem 0;
@@ -625,8 +634,30 @@ section {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    .nav-toggle {
+        display: block; /* Show the toggle button on mobile */
+    }
+
     .nav-links {
-        display: none;
+        display: none; /* Hide the desktop links */
+        flex-direction: column;
+        background-color: var(--maroon-dark);
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        padding: 1rem 0;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    }
+
+    .nav-links.active {
+        display: flex; /* Show the links when active */
+    }
+
+    .nav-link {
+        text-align: center;
+        padding: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
     }
     
     .hero-title {

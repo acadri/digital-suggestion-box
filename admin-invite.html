@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login - Muni University</title>
+    <title>Invite Admin - Muni University</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -18,24 +18,25 @@
                 <div class="logo-main">
                     <img src="logo.webp" alt="Muni University Logo" class="logo-img">
                     <div class="logo-text">
-                        <span class="system-name">Admin Portal</span>
+                        <span class="system-name">Invite Admin</span>
                     </div>
                 </div>
             </div>
             <div class="nav-links">
-                <a href="index.html" class="nav-link">Back to Main Site</a>
+                <a href="admin-dashboard.html" class="nav-link">Dashboard</a>
+                <a href="index.html" class="nav-link">Main Site</a>
             </div>
         </div>
     </nav>
 
-    <section class="admin-login-section">
+    <section class="admin-invite-section">
         <div class="container">
             <div class="section-header">
-                <h2>Admin Login</h2>
-                <p>Access the admin dashboard to manage student suggestions</p>
+                <h2>Invite a New Admin</h2>
+                <p>Enter the email address of the user you want to invite as an administrator.</p>
             </div>
             
-            <form id="adminLoginForm" class="admin-form">
+            <form id="adminInviteForm" class="admin-form">
                 <div class="form-group">
                     <label for="email">
                         <i class="fas fa-envelope"></i>
@@ -44,27 +45,16 @@
                     <input type="email" id="email" name="email" required>
                 </div>
 
-                <div class="form-group">
-                    <label for="password">
-                        <i class="fas fa-lock"></i>
-                        Password
-                    </label>
-                    <input type="password" id="password" name="password" required>
-                </div>
-
                 <button type="submit" class="submit-btn">
-                    <i class="fas fa-sign-in-alt"></i>
-                    Login
+                    <i class="fas fa-paper-plane"></i>
+                    Send Invitation
                 </button>
 
-                <div id="loginError" class="error-message" style="display: none;">
-                    Invalid login credentials. Please try again.
-                </div>
+                <div id="inviteMessage" class="message" style="display: none;"></div>
             </form>
         </div>
     </section>
 
-    <script src="admin-auth.js"></script>
-    <script src="setup-admin.js"></script>
+    <script src="admin-invite.js"></script>
 </body>
 </html>

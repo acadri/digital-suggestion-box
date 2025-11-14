@@ -2,9 +2,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const registerForm = document.getElementById('adminRegisterForm');
     const messageDiv = document.getElementById('registerMessage');
 
-    // Hard-coded admin registration code (in production, this should be more secure)
-    const ADMIN_REGISTRATION_CODE = "MUNI2024";
-
     registerForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         
@@ -12,7 +9,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
         const confirmPassword = document.getElementById('confirmPassword').value;
-        const adminCode = document.getElementById('adminCode').value;
         
         const submitBtn = registerForm.querySelector('.submit-btn');
         const originalText = submitBtn.innerHTML;
@@ -28,15 +24,16 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        if (adminCode !== ADMIN_REGISTRATION_CODE) {
-            showMessage("Invalid admin registration code!", "error");
-            return;
-        }
-
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
         submitBtn.disabled = true;
 
         try {
+            // Check if user is invited
+            const invitedAdminQuery = await db.collection(INVITED_ADMINS_COLLECTION).where("email", "==", email).get();
+            if (invitedAdminQuery.empty) {
+                throw { code: "auth/unauthorized" };
+            }
+
             // Create user in Firebase Authentication
             const userCredential = await auth.createUserWithEmailAndPassword(email, password);
             const user = userCredential.user;
@@ -49,6 +46,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 createdAt: new Date().toISOString(),
                 lastLogin: new Date().toISOString()
             });
+
+            // Remove from invited admins
+            const invitedAdminDoc = invitedAdminQuery.docs[0];
+            await db.collection(INVITED_ADMINS_COLLECTION).doc(invitedAdminDoc.id).delete();
 
             // Store user in localStorage and redirect
             localStorage.setItem('adminUser', JSON.stringify({
@@ -76,6 +77,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     break;
                 case 'auth/weak-password':
                     errorMessage += 'Password is too weak.';
+                    break;
+                case 'auth/unauthorized':
+                    errorMessage += 'This email is not authorized for admin registration.';
                     break;
                 default:
                     errorMessage += 'Please try again.';
